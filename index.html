@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bus Tracker Animated Icons</title>
+<style>
+  :root { --bg:#0f172a; --card:#1e293b; --ink:#e2e8f0; --muted:#94a3b8; --accent:#22d3ee; --warn:#fbbf24; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:24px 16px 48px; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui,sans-serif; }
+  h1 { margin:0 0 4px; font-size:1.5rem; }
+  p.sub { margin:0 0 24px; color:var(--muted); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:16px; max-width:900px; margin:0 auto; }
+  header { max-width:900px; margin:0 auto; }
+  .card { background:var(--card); border-radius:16px; padding:20px; text-align:center; }
+  .card svg { width:80px; height:80px; }
+  .card h2 { margin:12px 0 2px; font-size:1rem; }
+  .card small { color:var(--muted); }
+  svg { overflow:visible; stroke:var(--accent); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+  /* 1. Bus driving: body bobs, wheels spin, road dashes scroll */
+  .bus-body { animation:bob .6s ease-in-out infinite alternate; }
+  .wheel { transform-box:fill-box; transform-origin:center; animation:spin .8s linear infinite; }
+  .road { stroke-dasharray:6 8; animation:road .5s linear infinite; stroke:var(--muted); }
+  @keyframes bob { to { transform:translateY(-1.5px); } }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  @keyframes road { to { stroke-dashoffset:-14; } }
+
+  /* 2. Stop marker with arrival ripple */
+  .ripple { transform-box:fill-box; transform-origin:center; animation:ripple 1.8s ease-out infinite; opacity:0; }
+  .ripple.r2 { animation-delay:.9s; }
+  @keyframes ripple { 0%{ transform:scale(.3); opacity:.9; } 100%{ transform:scale(1.6); opacity:0; } }
+  .pin { animation:drop 1.8s ease-in-out infinite; }
+  @keyframes drop { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-3px); } }
+
+  /* 3. Wheel loader */
+  .loader { transform-box:fill-box; transform-origin:center; animation:spin 1.2s cubic-bezier(.5,.1,.5,.9) infinite; }
+
+  /* 4. Refresh button: spins on hover/focus and while .loading */
+  .refresh { cursor:pointer; background:none; border:0; padding:0; }
+  .refresh svg { transition:transform .5s; }
+  .refresh:hover svg, .refresh:focus-visible svg { transform:rotate(180deg); }
+  .refresh.loading svg { animation:spin .8s linear infinite; }
+
+  /* 5. Live signal pulse */
+  .live-dot { transform-box:fill-box; transform-origin:center; animation:pulse 1.2s ease-in-out infinite; fill:var(--warn); stroke:none; }
+  .wave { opacity:0; animation:wave 1.6s ease-out infinite; stroke:var(--warn); }
+  .wave.w2 { animation-delay:.4s; }
+  @keyframes pulse { 50%{ transform:scale(1.25); } }
+  @keyframes wave { 0%{ opacity:0; } 30%{ opacity:1; } 100%{ opacity:0; } }
+
+  @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none !important; transition:none !important; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Bus Tracker Animated Icons</h1>
+  <p class="sub">Pure SVG + CSS. Copy any icon's markup and its CSS into your site. Respects reduced-motion settings.</p>
+</header>
+
+<div class="grid">
+
+  <div class="card">
+    <svg viewBox="0 0 64 64" aria-label="Bus driving">
+      <g class="bus-body">
+        <rect x="8" y="14" width="48" height="30" rx="6"/>
+        <path d="M8 28h48"/>
+        <rect x="14" y="19" width="10" height="6" rx="1"/>
+        <rect x="27" y="19" width="10" height="6" rx="1"/>
+        <rect x="40" y="19" width="10" height="6" rx="1"/>
+        <circle class="wheel" cx="20" cy="46" r="5"/><path class="wheel" d="M20 41v10M15 46h10" stroke-width="1.5"/>
+        <circle class="wheel" cx="44" cy="46" r="5"/><path class="wheel" d="M44 41v10M39 46h10" stroke-width="1.5"/>
+      </g>
+      <path class="road" d="M4 56h56"/>
+    </svg>
+    <h2>Bus driving</h2><small>Live / in service</small>
+  </div>
+
+  <div class="card">
+    <svg viewBox="0 0 64 64" aria-label="Arriving at stop">
+      <circle class="ripple" cx="32" cy="50" r="14"/>
+      <circle class="ripple r2" cx="32" cy="50" r="14"/>
+      <g class="pin">
+        <path d="M32 46C22 34 20 30 20 24a12 12 0 0 1 24 0c0 6-2 10-12 22z"/>
+        <circle cx="32" cy="24" r="4"/>
+      </g>
+    </svg>
+    <h2>Arriving soon</h2><small>Stop marker</small>
+  </div>
+
+  <div class="card">
+    <svg viewBox="0 0 64 64" aria-label="Loading">
+      <g class="loader">
+        <circle cx="32" cy="32" r="18"/>
+        <circle cx="32" cy="32" r="4"/>
+        <path d="M32 14v14M32 36v14M14 32h14M36 32h14" stroke-width="1.5"/>
+      </g>
+    </svg>
+    <h2>Wheel loader</h2><small>Loading state</small>
+  </div>
+
+  <div class="card">
+    <button class="refresh" id="refresh" aria-label="Refresh">
+      <svg viewBox="0 0 64 64">
+        <path d="M50 32a18 18 0 1 1-6-13.5"/>
+        <path d="M46 10v10H36"/>
+      </svg>
+    </button>
+    <h2>Refresh</h2><small>Hover, or click to load</small>
+  </div>
+
+  <div class="card">
+    <svg viewBox="0 0 64 64" aria-label="Live signal">
+      <circle class="live-dot" cx="32" cy="38" r="5"/>
+      <path class="wave" d="M22 30a14 14 0 0 1 20 0"/>
+      <path class="wave w2" d="M14 22a26 26 0 0 1 36 0"/>
+    </svg>
+    <h2>Live signal</h2><small>GPS connected</small>
+  </div>
+
+</div>
+
+<script>
+  const btn = document.getElementById('refresh');
+  btn.addEventListener('click', () => {
+    btn.classList.add('loading');
+    setTimeout(() => btn.classList.remove('loading'), 1500);
+  });
+</script>
+</body>
+</html>
